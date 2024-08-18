@@ -3,7 +3,8 @@
     position: absolute;
     border-bottom: 1px solid $gray-100;
     //background-color: white;
-    background-color: #aad6b4;
+    // background-color: #aad6b4;
+    background-color: rgba(0,0,0,0.5);
     font-family: $headings-font-family;
 
     .navbar-brand {

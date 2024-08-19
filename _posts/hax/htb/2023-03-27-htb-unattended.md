@@ -2,7 +2,7 @@
 layout: post
 title: Hack The Box - Unattended
 subtitle: Writeup for HTB Unattended
-tags
+tags: hax htb
 date: 2023-03-27
 ---
 # Hack The Box - Unattended

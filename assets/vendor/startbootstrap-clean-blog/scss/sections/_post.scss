@@ -1,12 +1,12 @@
 // Styling for the post page
 .post-preview {
     >a {
-        color: $gray-900;
+        color: $primary;
 
         &:focus,
         &:hover {
             text-decoration: none;
-            color: $primary;
+            color: $gray-400;
         }
 
         >.post-title {

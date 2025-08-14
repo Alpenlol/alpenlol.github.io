@@ -1,8 +1,8 @@
 // Global styling for this template
 body {
     font-size: 20px;
-    color: $gray-900;
-    background-color: #f7f0dc;
+    color: $gray-300;
+    background-color: #202024;
 }
 
 p {
@@ -24,7 +24,7 @@ h6 {
 }
 
 a {
-    color: $gray-900;
+    color: $primary;
     font-weight: bold;
 
     &:focus,

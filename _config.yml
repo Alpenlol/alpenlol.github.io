@@ -3,6 +3,7 @@ author: Curt
 description: SITE IS FUCKED LOL
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
+background: https://lh3.googleusercontent.com/d/1EFSqh6HD_rbC4QUQqwjUXIhkQowzB4PQ
 
 theme: minima
 

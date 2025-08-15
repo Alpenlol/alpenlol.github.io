@@ -4,7 +4,7 @@ title: Hack The Box - Unattended
 subtitle: Writeup for HTB Unattended
 tags: hax htb
 date: 2023-03-27
-background: /img/DSC_0031.JPG
+background: https://lh3.googleusercontent.com/d/1JdPaNUt37-WV675cbqsskjcuJp0akekw
 ---
 # Hack The Box - Unattended
 

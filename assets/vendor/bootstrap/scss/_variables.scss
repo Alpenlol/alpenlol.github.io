@@ -329,8 +329,11 @@ $blockquote-small-color:      $gray-600 !default;
 $blockquote-small-font-size:  $small-font-size !default;
 $blockquote-font-size:        $font-size-base * 1.25 !default;
 
-$hr-border-color:             rgba($black, .1) !default;
+$bg-color: #202024 !default;
+
+$hr-border-color:             $bg-color !default;
 $hr-border-width:             $border-width !default;
+
 
 $mark-padding:                .2em !default;
 

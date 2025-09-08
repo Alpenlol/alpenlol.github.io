@@ -45,20 +45,20 @@ Next up, we're going to beat up the `conn-indicator` binary again. No groundbrea
 Sing along to grab some firmware, unpack it, and set up our environment. 
 ```
 # Download
-wget https://static.tp-link.com/upload/firmware/2024/202402/20240201/Archer%20AX50_V1_240108.zip
+$ wget https://static.tp-link.com/upload/firmware/2024/202402/20240201/Archer%20AX50_V1_240108.zip
 
 # Unzip 
-unzip Archer\ AX50_V1_240108.zip
+$ unzip Archer\ AX50_V1_240108.zip
 
 # Rename
-mv ax50v1_intel-up-ver1-0-14-P1\[20240108-rel42655\]_sign_2024-01-08_14.05.44.bin AX50_1-0-14.bin
+$ mv ax50v1_intel-up-ver1-0-14-P1\[20240108-rel42655\]_sign_2024-01-08_14.05.44.bin AX50_1-0-14.bin
 
 # Extract firmware image
 # Install Binwalk before this ;) 
-binwalk -e AX50_1-0-14.bin
+$ binwalk -e AX50_1-0-14.bin
 
 # change dir to target root
-cd _AX50_1-0-14.bin.extracted/squashfs-root
+$ cd _AX50_1-0-14.bin.extracted/squashfs-root
 ```
 
 Our target process lives at `/usr/sbin/conn-indicator` (remove first `/` for relative dir). 

@@ -13,7 +13,7 @@ Hunting for vulnerabilities and crafting exploits in low-powered MIPS devices su
 # Instrumenting for Dynamic Analysis
 A common workflow when investigating a device, and narrowing the scope to a specific process involves attaching a debugger to said process. [GDB](https://en.wikipedia.org/wiki/GNU_Debugger) (GNU Debugger) is often the tool of choice to debug during a dynamic analysis session. GDB is, for very good reason, not installed on routers or IoT devices by default. As attackers the choice move is to get a MIPS statically compiled binary of `gdb-server`, then port it onto our victim device by means of conventional hax file transfers (raw TCP with netcat). `gdb-server` is then attached to our process of interest, listening on a local port. From an attacking machine, it is commong to use `gdb-multiarch`, and specifying the `target remote <IP:PORT>` directive. 
 
-A common pitfall to this strategy, as hinted previously, is that these victim devices are already clapped-out on memory. Suddenly running `gdb-server` then attaching an probing remote debugging session will hinder performance, if not totally kill `SIGSEGV` (or equivalent) the debugging session. 
+A common pitfall to this strategy, as hinted previously, is that these victim devices are already clapped-out on memory. Suddenly running `gdb-server` then attaching a probing remote debugging session will hinder performance, if not totally kill `SIGSEGV` (or equivalent) the debugging session. 
 
 # Let's Take the Debug Process and Push it Somewhere Else
 

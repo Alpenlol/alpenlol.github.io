@@ -143,7 +143,7 @@ Perl Modules Scan: 5.2 seconds
 └── 17 host header injection findings
 ```
 
-In under 3 minutes, RAPTOR identified 256+ vulnerabilities across 300+ files. The amount of findings is impressive but obviously has the usual false positives, as many of these results are from [CodeQL](https://codeql.github.com/) and [SemGrep](https://github.com/semgrep/semgrep).
+In under 3 minutes, RAPTOR identified 256+ vulnerabilities across 300+ files. The amount of findings is impressive but obviously has the usual false positives, as many of these results are from [CodeQL](https://codeql.github.com/) and [semgrep](https://github.com/semgrep/semgrep).
 
 ## Where AI Shines
 

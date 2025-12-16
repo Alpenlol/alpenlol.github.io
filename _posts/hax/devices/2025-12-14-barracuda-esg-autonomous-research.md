@@ -147,7 +147,7 @@ In under 3 minutes, RAPTOR identified 256+ vulnerabilities across 300+ files. Th
 
 ## Where AI Shines
 
-1. **Recon:** AI finds attack surface very quickly. This is often busy work and is done quickly with standardized automation. 
+1. **Recon:** AI finds attack surface very quickly. This is often busy work and is done quickly with AI automation. Surface area is quickly mapped to backend functionality.  
 2. **Test harness creation:**  Claude was very quick to create grammar-based fuzzers in python. This is a fun use case for AI, as there's plenty room for errors and non-determinism.
 3. **Documentation:** Auto-generating SARIF reports, attack trees, exploitation scenarios. 
 
@@ -159,13 +159,13 @@ AI is great at finding the puzzle pieces, but humans still need to assemble the 
 ## The Hybrid Approach
 
 High level workflow:
-1. **Targeting** - Human selects initial target.
+1. **Targeting** - Human selects initial target. We like firmware so we attack firmware. 
 2. **Extraction** - AI does a great job at unpacking and emulating firmware!
 3. **RAPTOR sweep** - Autonomous scanning of all code, configs, binaries. This grabs the low hanging fruit. 
-4. **Triage** - Human review of critical findings.
-5. **Recon** - AI instructed to map all surface area (ports, applications, modules, i.e. public attack surface).
+4. **Triage** - Human review of high/critical findings.
+5. **Recon** - AI instructed to map all surface area (ports, applications, modules, i.e. public attack surface). Maps it to backend functionality as well. 
 6. **Manual deep dive** - Tracing interesting paths the AI flagged.
-7. **Fuzzing** - AI instructed to launch AFL and custom grammer fuzzer against high priority attack surface.
+7. **Fuzzing** - AI instructed to launch AFL and custom grammer fuzzer against high priority attack surface. Emphasis on test case generation that maximizes test coverage. 
 8. **Exploitation** - Human building PoCs for confirmed vulns. AI is alright at selecting gadgets but does not piece the picture together well. 
 
 This combination has made us significantly more effective. Claude x RAPTOR handles the grunt work. We focus on the creative exploitation.

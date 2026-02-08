@@ -4,7 +4,7 @@ title: AI Assisted Security Research on the Barracuda ESG - Recon, Fuzzing, and 
 subtitle: How we leveraged offensive security AI to automate fuzz testing against an enterprise email appliance
 tags: hax barracuda fuzzing ai pwn
 date: 2025-12-14
-background: https://lh3.googleusercontent.com/d/1yXfE2xyf_iwSUQiRg33LO9pybE1lPPro 
+background: /img/bg-hyperv.png
 ---
 
 # Barracuda ESG Research - The Continuation

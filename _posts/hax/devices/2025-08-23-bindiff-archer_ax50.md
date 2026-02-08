@@ -4,7 +4,7 @@ title: Patch Diffing CVE-2025-40634 With BinDiff and Binary Ninja
 subtitle: Diffing a known fix in the TP-Link Archer AX50 Router
 tags: hax cve patch binaryninja bindiff 
 date: 2025-08-23
-background: https://lh3.googleusercontent.com/d/1r3TceEVmIcL918IuDKL1MaNrZRL0jntH
+background: /img/bg-bindiff-archer.png
 ---
 
 # My Adopted Router

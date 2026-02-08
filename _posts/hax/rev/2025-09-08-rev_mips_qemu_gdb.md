@@ -4,7 +4,7 @@ title: Reverse Engineering MIPS Binaries with QEMU and GDB Multi-arch
 subtitle: Extracting router firmware and using QEMU with GDB Multi-arch
 tags: rev gdb mips qemu 
 date: 2025-09-08
-background: https://lh3.googleusercontent.com/d/1B384OyOyFyCODK8sLAnbTR06NO7sDQli
+background: /img/bg-rev-mips.png
 ---
 
 # Architecture and Memory Constraints 

@@ -7,7 +7,7 @@ body {
 
 p {
     line-height: 1.5;
-    margin: 30px 0;
+    margin: 20px 0;
 
     a {
         text-decoration: underline;
@@ -23,13 +23,21 @@ h6 {
     font-weight: 800;
 }
 
+h1,
+h2 {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
 a {
     color: $primary;
     font-weight: bold;
+    transition: text-shadow 0.2s ease;
 
     &:focus,
     &:hover {
         color: $primary;
+        text-shadow: 0 0 8px rgba($primary, 0.4);
     }
 }
 

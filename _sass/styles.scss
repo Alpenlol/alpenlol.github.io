@@ -1,2 +1,80 @@
 // Import Core Clean Blog SCSS
 @import "../assets/vendor/startbootstrap-clean-blog/scss/styles.scss";
+
+// Rouge syntax highlighting — cyberpunk dark terminal theme
+.highlight {
+  background: #0c0c0e;
+  color: #c8c8cc;
+
+  // Comments
+  .c, .cm, .c1, .cs, .cp { color: #555566; font-style: italic; }
+
+  // Strings
+  .s, .s1, .s2, .sb, .sc, .sh, .sx, .sr { color: #d4243b; }
+
+  // Keywords
+  .k, .kc, .kd, .kn, .kp, .kr, .kt, .kv { color: #f0f0f0; font-weight: bold; }
+
+  // Functions / methods
+  .nf, .fm, .ni, .nl, .nn, .nx { color: #b0b0b8; }
+
+  // Names / variables
+  .n, .na, .nb, .nc, .nd, .ne, .no, .nv, .bp, .vc, .vg, .vi, .vm { color: #c8c8cc; }
+
+  // Numbers / constants
+  .m, .mi, .mf, .mh, .mo, .il { color: #cc8844; }
+
+  // Operators
+  .o, .ow { color: #e0e0e4; }
+
+  // Punctuation
+  .p { color: #c8c8cc; }
+
+  // Generic
+  .gd { color: #d4243b; }
+  .gi { color: #28a745; }
+  .ge { font-style: italic; }
+  .gs { font-weight: bold; }
+  .gh, .gu { color: #888899; font-weight: bold; }
+
+  // Errors
+  .err { color: #d4243b; }
+
+  // Text
+  .w { color: #c8c8cc; }
+
+  pre {
+    margin: 0;
+  }
+}
+
+// Tables — data panel style matching code blocks
+table {
+  background: #0c0c0e;
+  border: 1px solid #1a1a1f;
+  border-left: 3px solid $primary;
+  border-radius: 0;
+  width: 100%;
+  margin: 20px 0;
+
+  th, td {
+    padding: 10px 16px;
+    border: 1px solid #1a1a1f;
+  }
+
+  th {
+    color: #f0f0f0;
+    font-family: $headings-font-family;
+    text-transform: uppercase;
+    font-size: 0.85em;
+    letter-spacing: 1px;
+  }
+
+  td {
+    color: #c8c8cc;
+  }
+
+  tr:hover td {
+    background: rgba($primary, 0.05);
+  }
+}

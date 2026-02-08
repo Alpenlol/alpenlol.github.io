@@ -4,6 +4,32 @@
 
 <script src="{{"/assets/scripts.js" | relative_url }}"></script>
 
+<script>
+  if (document.getElementById("particles")) {
+    tsParticles.load("particles", {
+      fullScreen: { enable: false },
+      background: { color: "transparent" },
+      particles: {
+        number: { value: 80, density: { enable: true, area: 800 } },
+        color: { value: "#d4243b" },
+        shape: { type: "square" },
+        opacity: { value: 0.4, random: { enable: true, minimumValue: 0.1 } },
+        size: { value: 5, random: { enable: true, minimumValue: 2 } },
+        move: {
+          enable: true,
+          speed: 0.4,
+          direction: "none",
+          random: true,
+          straight: false,
+          outModes: "out"
+        },
+        links: { enable: false }
+      },
+      detectRetina: true
+    });
+  }
+</script>
+
 {% if page.url contains 'contact' %}
   <!-- Form Validation -->
   <script src="{{"/assets/vendor/startbootstrap-clean-blog/js/jqBootstrapValidation.js" | relative_url }}"></script>

@@ -68,6 +68,16 @@ header.masthead {
             font-family: $headings-font-family;
         }
 
+        .motto {
+            font-size: 12px;
+            font-style: italic;
+            font-weight: 300;
+            text-align: right;
+            margin: 8px 0 0;
+            color: rgba($white, 0.5);
+            font-family: $font-family-base;
+        }
+
         @media only screen and (min-width: 768px) {
             h1 {
                 font-size: 80px;

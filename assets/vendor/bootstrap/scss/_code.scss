@@ -3,6 +3,7 @@ code {
   @include font-size($code-font-size);
   color: $code-color;
   word-wrap: break-word;
+  font-family: $font-family-monospace;
 
   // Streamline the style when inside anchors to avoid broken underline and more
   a > & {
@@ -32,7 +33,12 @@ pre {
   display: block;
   @include font-size($code-font-size);
   color: $code-color;
-  background: $gray-800;
+  background: #0c0c0e;
+  border: 1px solid #1a1a1f;
+  border-left: 3px solid $primary;
+  padding: 16px 20px;
+  border-radius: 0;
+  font-family: $font-family-monospace;
 
   // Account for some code outputs that place code tags in pre tags
   code {

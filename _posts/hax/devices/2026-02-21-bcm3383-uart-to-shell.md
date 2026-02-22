@@ -84,7 +84,7 @@ The CFE (Common Firmware Environment) bootloader presents a debug menu:
 +============================================================+
 ```
 
-That `w` + `j` combination is the key. Write shellcode to RAM, jump to it, get arbitrary code execution. No shell required.
+That `w` + `j` combination is the key. Write shellcode to RAM, jump to it, get arbitrary code execution. No shell required. And since this is all over a serial port, we can programmatically hammer the shit out of these commands with Python scripts and MIPS shellcode — which is exactly what we did.
 
 The front door was locked. But someone left the maintenance hatch wide open.
 

@@ -94,18 +94,34 @@ The front door was locked. But someone left the maintenance hatch wide open.
 
 **Payload #1**: Write 0xCAFEBABE to memory, read it back.
 
+```
+Main Menu: w           # write to memory
+Write memory.
+
+Address: 81000000      # my input
+Value: CAFEBABE        # my input
+
+Main Menu: r           # read from memory
+Read Memory.
+
+Address: 81000000      # my input
+Value at 81000000: CAFEBABE
+```
+
 It worked, I have write-what-where AND read primitives.
 
-**Payload #2**: Get output somehow. I needed to print data over UART, but had no idea what functions existed or where they lived. Tried a few guesses based on common bootloader patterns — nothing. No output.
+Simple enough, right? We can read and write 4 bytes to pretty much any mapped memory address. We'll just have a python script that enters the character directives `w` for writes, `r` for reads. Call this over and over again and we can sling a LOT of shellcode over, or read entire memory regions and start reverse engineering in-memory code.
 
-**Payload #3**: Screw it, direct UART register manipulation. Found some register references in online BCM3383 notes, guessed at offsets, iterated until something worked. Eventually landed on 0xB4E00500, status at +0x12, TX at +0x17:
+**Payload #2**: Get output somehow. I needed to print data over UART, but had no idea what functions existed or where they lived. Tried a few guesses based on common bootloader patterns — nothing. No output. Lots of spraying and praying, and crashing and burning.
+
+**Payload #3**: Screw it, direct UART register manipulation. Found some register references in online BCM3383 notes, guessed at offsets, scanned peripheral memory regions, reverse engineered register layouts, and iterated until something worked. Eventually landed on 0xB4E00500, status at +0x12, TX at +0x17. Whipped up some quick UART graffiti shellcode:
 
 Console output:
 ```
 *** LOL CURT WUZ HERE ***
 ```
 
-I had output. Now I could exfiltrate data.
+I had output. This UART graffiti shellcode quickly became a re-purposeable gadget used to dump flash and later RAM.
 
 ---
 
@@ -115,20 +131,27 @@ Before dumping flash, I needed to figure out what memory was even accessible.
 
 ### The Crash Screen
 
-Got real familiar with this one. Any bad memory access produced:
+I got real familiar with this one. Any bad memory access produced a full register dump:
 
 ```
-******************gillspie ffe****gillspie ffe************
-*                                                         *
-*   MEMORY ACCESS ERROR                                   *
-*   Exception: Bus Error                                  *
-*   EPC: 0x83F89XXX                                       *
-*   BadVA: [the address we tried to access]               *
-*                                                         *
-***********************************************************
+******************** CRASH ********************
+
+EXCEPTION TYPE: 7/Bus error (load/store)
+TP0
+r00/00 = 00000000 r01/at = 83f90000 r02/v0 = a0010000 r03/v1 = 00000001
+r04/a0 = 00000000 r05/a1 = 00000000 r06/a2 = a0010000 r07/a3 = 00000000
+r08/t0 = b0000000 r09/t1 = 00000000 r10/t2 = 00000029 r11/t3 = 0000003a
+r12/t4 = 20000000 r13/t5 = 000000a8 r14/t6 = 00000000 r15/t7 = 00000000
+r16/s0 = b4e00500 r17/s1 = b0000000 r18/s2 = 00000000 r19/s3 = 0337f980
+r20/s4 = 00010000 r21/s5 = 00008000 r22/s6 = 00100010 r23/s7 = 0000bfa4
+r24/t8 = 00000002 r25/t9 = 00001021 r26/k0 = 1dcd6500 r27/k1 = 0337f980
+r28/gp = 9fc00778 r29/sp = 87ffff20 r30/fp = 00000215 r31/ra = a0010060
+
+pc   : 0xa0010068              sr  : 0x00000002
+cause: 0x0000801c              addr: 0x00000000
 ```
 
-Seeing "gillspie ffe" (a Broadcom engineer's name, presumably) meant instant reboot and forced power cycle to restart. I saw this screen *many* times.
+Note `r08/t0 = b0000000` — the address we tried to access. This screen meant instant reboot and forced power cycle to restart. I saw it *many* times, but the full register state dump was actually paramount for debugging — you get the complete CPU state at the moment things went wrong.
 
 ### Mapping Memory
 
@@ -163,7 +186,7 @@ I dumped the 32KB I *could* see. It was just a first-stage loader that decompres
 
 ## Act 4: The RAM Dump Revelation
 
-If CFE runs from RAM, I could dump it directly. A fast binary dump payload extracted 256KB of the running bootloader.
+If CFE runs from RAM, I could dump it directly. A fast binary dump payload reusing our graffiti shellcode from earlier extracted 256KB of the running bootloader.
 
 Loaded it into Binary Ninja. Struggled to get clean disassembly — Binary Ninja's MIPS support is rough. Switched to Ghidra, which handled it fine.
 
@@ -219,7 +242,7 @@ Binary size: 8,388,608 bytes
 SHA256: c9526cbcdf0113eeab74c413c09a7ff2aaee55f1a1e658812d072fc396ced039
 ```
 
-All 8 megabytes of firmware, extracted through a serial port.
+All 8 megabytes of firmware, extracted through a serial port via repurposed chained bootloader function calls.
 
 ---
 

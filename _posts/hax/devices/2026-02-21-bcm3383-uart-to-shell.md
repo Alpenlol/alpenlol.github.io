@@ -84,7 +84,7 @@ The CFE (Common Firmware Environment) bootloader presents a debug menu:
 +============================================================+
 ```
 
-That `w` + `j` combination is the key. Write shellcode to RAM, jump to it, get arbitrary code execution. No shell required. And since this is all over a serial port, we can programmatically hammer the shit out of these commands with Python scripts and MIPS shellcode — which is exactly what we did.
+That `w` + `j` combination is the key. Write shellcode to RAM, jump to it, get arbitrary code execution. No shell required. And since this is all over a serial port, I can programmatically hammer the shit out of these commands with Python scripts and MIPS shellcode — which is exactly what I did.
 
 The front door was locked. But someone left the maintenance hatch wide open.
 
@@ -110,7 +110,7 @@ Value at 81000000: CAFEBABE
 
 It worked, I have write-what-where AND read primitives.
 
-Simple enough, right? We can read and write 4 bytes to pretty much any mapped memory address. We'll just have a python script that enters the character directives `w` for writes, `r` for reads. Call this over and over again and we can sling a LOT of shellcode over, or read entire memory regions and start reverse engineering in-memory code.
+Simple enough, right? I can read and write 4 bytes to pretty much any mapped memory address. I'll just have a python script that enters the character directives `w` for writes, `r` for reads. Call this over and over again and I can sling a LOT of shellcode over, or read entire memory regions and start reverse engineering in-memory code.
 
 **Payload #2**: Get output somehow. I needed to print data over UART, but had no idea what functions existed or where they lived. Tried a few guesses based on common bootloader patterns — nothing. No output. Lots of spraying and praying, and crashing and burning.
 
@@ -151,7 +151,7 @@ pc   : 0xa0010068              sr  : 0x00000002
 cause: 0x0000801c              addr: 0x00000000
 ```
 
-Note `r08/t0 = b0000000` — the address we tried to access. This screen meant instant reboot and forced power cycle to restart. I saw it *many* times, but the full register state dump was actually paramount for debugging — you get the complete CPU state at the moment things went wrong.
+Note `r08/t0 = b0000000` — the address I tried to access. This screen meant instant reboot and forced power cycle to restart. I saw it *many* times, but the full register state dump was actually paramount for debugging — you get the complete CPU state at the moment things went wrong.
 
 ### Mapping Memory
 

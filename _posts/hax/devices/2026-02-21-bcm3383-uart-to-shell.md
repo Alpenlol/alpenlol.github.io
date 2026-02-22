@@ -178,7 +178,7 @@ The device has 8MB of SPI flash, but I could only see a tiny 32KB window. Not gr
 
 "Just access the SPI controller directly," I thought. Every datasheet pointed to 0xB0000000.
 
-Bus error, crash, power cycle, try again. Tried different access patterns, different sizes, different alignments — nothing but **CRASH** register dumps over and over for hours.
+Bus error, crash, power cycle, try again. Tried different access patterns, different sizes, different alignments — nothing but `** CRASH **` register dumps over and over for hours.
 
 I dumped the 32KB I *could* see. It was just a first-stage loader that decompresses the real bootloader into RAM. The actual CFE runs from 0x83F80000.
 

@@ -92,7 +92,7 @@ The front door was locked. But someone left the maintenance hatch wide open.
 
 ## Act 2: First Blood
 
-**Payload #1**: Write 0xCAFEBABE to memory, read it back.
+**Payload #1**: Write `0xCAFEBABE` (random hexspeak value) to memory, read it back.
 
 ```
 Main Menu: w           # write to memory
@@ -114,7 +114,7 @@ Simple enough, right? I can read and write 4 bytes to pretty much any mapped mem
 
 **Payload #2**: Get output somehow. I needed to print data over UART, but had no idea what functions existed or where they lived. Tried a few guesses based on common bootloader patterns — nothing. No output. Lots of spraying and praying, and crashing and burning.
 
-**Payload #3**: Screw it, direct UART register manipulation. Found some register references in online BCM3383 notes, guessed at offsets, scanned peripheral memory regions, reverse engineered register layouts, and iterated until something worked. Eventually landed on 0xB4E00500, status at +0x12, TX at +0x17. Whipped up some quick UART graffiti shellcode:
+**Payload #3**: Screw it, direct UART register manipulation. Found some register references in online BCM3383 notes, guessed at offsets, scanned peripheral memory regions, reverse engineered register layouts, and iterated until something worked. Eventually landed on `0xB4E00500`, status at `+0x12`, TX at `+0x17`. Whipped up some quick UART graffiti shellcode:
 
 Console output:
 ```
@@ -176,11 +176,11 @@ Result: Flash window is exactly 32KB (0xBFC00000-0xBFC07FFF)
 
 The device has 8MB of SPI flash, but I could only see a tiny 32KB window. Not great.
 
-"Just access the SPI controller directly," I thought. Every datasheet pointed to 0xB0000000.
+"Just access the SPI controller directly," I thought. Every datasheet pointed to `0xB0000000`.
 
 Bus error, crash, power cycle, try again. Tried different access patterns, different sizes, different alignments — nothing but `** CRASH **` register dumps over and over for hours.
 
-I dumped the 32KB I *could* see. It was just a first-stage loader that decompresses the real bootloader into RAM. The actual CFE runs from 0x83F80000.
+I dumped the 32KB I *could* see. It was just a first-stage loader that decompresses the real bootloader into RAM. The actual CFE runs from `0x83F80000`.
 
 ---
 
@@ -192,12 +192,12 @@ Loaded it into Binary Ninja. Struggled to get clean disassembly — Binary Ninja
 
 I spent a while in Ghidra tracing through the code, searching for flash-related strings like "SPI", "flash", "read", "write" and following call graphs and register accesses through a bunch of candidates.
 
-First discovery: CFE doesn't use 0xB0000000 at all. It uses **HSPI at 0xB4E01000** — a completely different peripheral that isn't in any datasheet I found. All those hours crashing on 0xB0000000... FFFUUUU-. The answer was in the code the whole time.
+First discovery: CFE doesn't use `0xB0000000` at all. It uses **HSPI at `0xB4E01000`** — a completely different peripheral that isn't in any datasheet I found. All those hours crashing on `0xB0000000`... FFFUUUU-. The answer was in the code the whole time.
 
 Second discovery: two functions that do all the flash work:
 
-- `SpiFlashRead` at 0x83F810A0
-- `SpiFlashWrite` at 0x83F80EC4
+- `SpiFlashRead` at `0x83F810A0`
+- `SpiFlashWrite` at `0x83F80EC4`
 
 I reversed their calling conventions — standard MIPS, arguments in `$a0-$a2`, return value in `$v0`. These were the keys.
 
@@ -250,7 +250,7 @@ All 8 megabytes of firmware, extracted through a serial port via repurposed chai
 
 Extraction is nice. But can I *write*?
 
-`SpiFlashWrite` lives at 0x83F80EC4. Same calling convention, so I targeted a version string at flash offset 0x122C8.
+`SpiFlashWrite` lives at `0x83F80EC4`. Same calling convention, so I targeted a version string at flash offset `0x122C8`.
 
 **Result**: Write succeeded but data was garbled — likely alignment or page boundary issues. Still proves I can write to flash. Refinement needed for clean writes.
 
@@ -264,12 +264,12 @@ Binary search probing gave me the accessible regions:
 
 | Address Range | Description |
 |---------------|-------------|
-| 0x80000000-0x87FFFFFF | RAM (128MB, KSEG0 cached) |
-| 0xA0000000-0xA7FFFFFF | RAM (KSEG1 uncached mirror) |
-| 0xB0000000 | SPI Controller (**LOCKED** — red herring) |
-| 0xB4E00500 | UART |
-| 0xB4E01000 | HSPI Controller (**the real flash interface**) |
-| 0xBFC00000-0xBFC07FFF | Flash window (only 32KB visible) |
+| `0x80000000`-`0x87FFFFFF` | RAM (128MB, KSEG0 cached) |
+| `0xA0000000`-`0xA7FFFFFF` | RAM (KSEG1 uncached mirror) |
+| `0xB0000000` | SPI Controller (**LOCKED** — red herring) |
+| `0xB4E00500` | UART |
+| `0xB4E01000` | HSPI Controller (**the real flash interface**) |
+| `0xBFC00000`-`0xBFC07FFF` | Flash window (only 32KB visible) |
 
 ---
 
@@ -324,7 +324,7 @@ _start:
 ## Mistakes Made
 
 ### The SPI Red Herring
-I spent hours probing 0xB0000000 and every attempt crashed — the real controller was at 0xB4E01000 the whole time.
+I spent hours probing `0xB0000000` and every attempt crashed — the real controller was at `0xB4E01000` the whole time.
 
 ### Trusting CFE's Print Functions
 After dumping CFE from RAM, I thought I could just call `printf` directly. Nope — expected global state I didn't have. Stuck with my own UART routines.

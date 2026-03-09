@@ -7,7 +7,6 @@ date: 2026-02-21
 background: /img/bg-bindiff-archer.png
 ---
 
-# Press 'p' to Pwn Device
 
 Started with a locked-down UART port that refused shell access. Ended with full firmware extraction and persistent flash modification on a BCM3383-based cable modem. Along the way: custom MIPS shellcode, bootloader reverse engineering, and a few hours wasted probing the wrong peripheral because I trusted documentation.
 

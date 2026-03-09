@@ -4,7 +4,7 @@ title: I Put Prompt Injections in My SSH Banner
 subtitle: Active countermeasures against LLM-powered pentest tools
 tags: hax llm defense prompt-injection ssh
 date: '2026-03-09'
-background: /img/bg-bindiff-archer.png
+background: /img/bg-cve-2023-2868.png
 ---
 
 I like my home network to feel like a terminal from a cyberpunk novel — everything has a restricted-access aesthetic, red on black, ominous warning banners, the works. Pure LARP, but it's my infrastructure and I'll make it feel like a Neuromancer fever dream if I want to dammit. So I was setting up a new SSH banner — federal warning language, usual home network stuff — and started wondering: what if I made it actually do something?

@@ -26,7 +26,7 @@ Spoiler: the documentation lied.
 
 This device is **14 years old** (firmware dated 2012). The BCM3383 chipset reached end-of-life years ago and isn't deployed in production cable networks anymore. Modern DOCSIS 3.1/4.0 infrastructure uses completely different hardware with secure boot, signed firmware, and locked-down bootloaders.
 
-Publishing this for educational purposes — embedded security concepts, MIPS shellcode development, bootloader exploitation techniques on obsolete hardware. No risk to current cable infrastructure.
+Publishing this for educational purposes: embedded security concepts, MIPS shellcode development, bootloader exploitation techniques on obsolete hardware. No risk to current cable infrastructure.
 
 If you somehow still have one of these in production... you have bigger problems.
 
@@ -83,7 +83,7 @@ The CFE (Common Firmware Environment) bootloader presents a debug menu:
 +============================================================+
 ```
 
-That `w` + `j` combination is the key. Write shellcode to RAM, jump to it, get arbitrary code execution. No shell required. And since this is all over a serial port, I can programmatically hammer the shit out of these commands with Python scripts and MIPS shellcode — which is exactly what I did.
+That `w` + `j` combination is the key. Write shellcode to RAM, jump to it, get arbitrary code execution. No shell required. And since this is all over a serial port, I can programmatically hammer the shit out of these commands with Python scripts and MIPS shellcode, which is exactly what I did.
 
 The front door was locked. But someone left the maintenance hatch wide open.
 
@@ -111,7 +111,7 @@ It worked, I have write-what-where AND read primitives.
 
 Simple enough, right? I can read and write 4 bytes to pretty much any mapped memory address. I'll just have a python script that enters the character directives `w` for writes, `r` for reads. Call this over and over again and I can sling a LOT of shellcode over, or read entire memory regions and start reverse engineering in-memory code.
 
-**Payload #2**: Get output somehow. I needed to print data over UART, but had no idea what functions existed or where they lived. Tried a few guesses based on common bootloader patterns — nothing. No output. Lots of spraying and praying, and crashing and burning.
+**Payload #2**: Get output somehow. I needed to print data over UART, but had no idea what functions existed or where they lived. Tried a few guesses based on common bootloader patterns: nothing. No output. Lots of spraying and praying, and crashing and burning.
 
 **Payload #3**: Screw it, direct UART register manipulation. Found some register references in online BCM3383 notes, guessed at offsets, scanned peripheral memory regions, reverse engineered register layouts, and iterated until something worked. Eventually landed on `0xB4E00500`, status at `+0x12`, TX at `+0x17`. Whipped up some quick UART graffiti shellcode:
 
@@ -150,7 +150,7 @@ pc   : 0xa0010068              sr  : 0x00000002
 cause: 0x0000801c              addr: 0x00000000
 ```
 
-Note `r08/t0 = b0000000` — the address I tried to access. This screen meant instant reboot and forced power cycle to restart. I saw it *many* times, but the full register state dump was actually paramount for debugging — you get the complete CPU state at the moment things went wrong.
+Note `r08/t0 = b0000000`, the address I tried to access. This screen meant instant reboot and forced power cycle to restart. I saw it *many* times, but the full register state dump was actually paramount for debugging: you get the complete CPU state at the moment things went wrong.
 
 ### Mapping Memory
 
@@ -177,7 +177,7 @@ The device has 8MB of SPI flash, but I could only see a tiny 32KB window. Not gr
 
 "Just access the SPI controller directly," I thought. Every datasheet pointed to `0xB0000000`.
 
-Bus error, crash, power cycle, try again. Tried different access patterns, different sizes, different alignments — nothing but `** CRASH **` register dumps over and over for hours.
+Bus error, crash, power cycle, try again. Tried different access patterns, different sizes, different alignments: nothing but `** CRASH **` register dumps over and over for hours.
 
 I dumped the 32KB I *could* see. It was just a first-stage loader that decompresses the real bootloader into RAM. The actual CFE runs from `0x83F80000`.
 
@@ -187,18 +187,18 @@ I dumped the 32KB I *could* see. It was just a first-stage loader that decompres
 
 If CFE runs from RAM, I could dump it directly. A fast binary dump payload reusing our graffiti shellcode from earlier extracted 256KB of the running bootloader.
 
-Loaded it into Binary Ninja. Struggled to get clean disassembly — Binary Ninja's MIPS support is rough. Switched to Ghidra, which handled it fine.
+Loaded it into Binary Ninja. Struggled to get clean disassembly; Binary Ninja's MIPS support is rough. Switched to Ghidra, which handled it fine.
 
 I spent a while in Ghidra tracing through the code, searching for flash-related strings like "SPI", "flash", "read", "write" and following call graphs and register accesses through a bunch of candidates.
 
-First discovery: CFE doesn't use `0xB0000000` at all. It uses **HSPI at `0xB4E01000`** — a completely different peripheral that isn't in any datasheet I found. All those hours crashing on `0xB0000000`... FFFUUUU-. The answer was in the code the whole time.
+First discovery: CFE doesn't use `0xB0000000` at all. It uses **HSPI at `0xB4E01000`**, a completely different peripheral that isn't in any datasheet I found. All those hours crashing on `0xB0000000`... FFFUUUU-. The answer was in the code the whole time.
 
 Second discovery: two functions that do all the flash work:
 
 - `SpiFlashRead` at `0x83F810A0`
 - `SpiFlashWrite` at `0x83F80EC4`
 
-I reversed their calling conventions — standard MIPS, arguments in `$a0-$a2`, return value in `$v0`. These were the keys.
+I reversed their calling conventions: standard MIPS, arguments in `$a0-$a2`, return value in `$v0`. These were the keys.
 
 ![SpiFlashRead reversed in Ghidra](/img/hax/htb/bcm3383/ghidra.png)
 *ghidra screenshot with minimal context and cryptic MIPS code*
@@ -251,7 +251,7 @@ Extraction is nice. But can I *write*?
 
 `SpiFlashWrite` lives at `0x83F80EC4`. Same calling convention, so I targeted a version string at flash offset `0x122C8`.
 
-**Result**: Write succeeded but data was garbled — likely alignment or page boundary issues. Still proves I can write to flash. Refinement needed for clean writes.
+**Result**: Write succeeded but data was garbled, likely alignment or page boundary issues. Still proves I can write to flash. Refinement needed for clean writes.
 
 Point is: **persistent firmware modification via shellcode injected through UART works.**
 
@@ -265,7 +265,7 @@ Binary search probing gave me the accessible regions:
 |---------------|-------------|
 | `0x80000000`-`0x87FFFFFF` | RAM (128MB, KSEG0 cached) |
 | `0xA0000000`-`0xA7FFFFFF` | RAM (KSEG1 uncached mirror) |
-| `0xB0000000` | SPI Controller (**LOCKED** — red herring) |
+| `0xB0000000` | SPI Controller (**LOCKED**, red herring) |
 | `0xB4E00500` | UART |
 | `0xB4E01000` | HSPI Controller (**the real flash interface**) |
 | `0xBFC00000`-`0xBFC07FFF` | Flash window (only 32KB visible) |
@@ -323,10 +323,10 @@ _start:
 ## Mistakes Made
 
 ### The SPI Red Herring
-I spent hours probing `0xB0000000` and every attempt crashed — the real controller was at `0xB4E01000` the whole time.
+I spent hours probing `0xB0000000` and every attempt crashed; the real controller was at `0xB4E01000` the whole time.
 
 ### Trusting CFE's Print Functions
-After dumping CFE from RAM, I thought I could just call `printf` directly. Nope — expected global state I didn't have. Stuck with my own UART routines.
+After dumping CFE from RAM, I thought I could just call `printf` directly. Nope. Expected global state I didn't have. Stuck with my own UART routines.
 
 ### Register Clobbering
 All my helper functions saved `$ra` to `$t9`. Nested calls overwrote it. Added proper stack frames.
@@ -410,13 +410,13 @@ A locked front door means nothing if you leave the maintenance hatch open.
 
 ## Takeaways
 
-1. **Simple beats complex** — `w`+`j` beat TFTP with checksums
-2. **Trace real execution** — documentation lies; code doesn't
-3. **Dump everything** — RAM often contains more than flash
-4. **Reuse existing code** — CFE's functions work from shellcode
-5. **Test incrementally** — magic values → characters → strings → dumps
-6. **Stack frames matter** — proper calling conventions prevent crashes
-7. **Trust NO ONE, not even the documentation** — the obvious peripheral was wrong
+1. **Simple beats complex**: `w`+`j` beat TFTP with checksums
+2. **Trace real execution**: documentation lies; code doesn't
+3. **Dump everything**: RAM often contains more than flash
+4. **Reuse existing code**: CFE's functions work from shellcode
+5. **Test incrementally**: magic values → characters → strings → dumps
+6. **Stack frames matter**: proper calling conventions prevent crashes
+7. **Trust NO ONE, not even the documentation**: the obvious peripheral was wrong
 
 ---
 

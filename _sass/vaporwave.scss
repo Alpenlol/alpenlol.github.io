@@ -272,6 +272,30 @@ html.vaporwave {
     animation-delay: 2s;
   }
 
+  // ---- Terminal overrides ----
+  #terminal-window {
+    background: #e6fafa;
+    border-color: #ff71ce;
+    box-shadow: 0 20px 60px rgba(230, 31, 160, 0.3);
+  }
+  .terminal-titlebar {
+    background: #b3f0f0;
+    border-bottom: 1px solid #ff71ce;
+  }
+  .terminal-title    { color: #b967ff; }
+  #terminal-output   { color: #0d0050; }
+  .terminal-prompt   { color: #e61fa0; }
+  #terminal-input    { color: #0d0050; caret-color: #e61fa0; }
+  .t-output          { color: #0d0050; }
+  .t-error           { color: #e61fa0; }
+  .t-info            { color: #b967ff; }
+  .t-prompt          { color: #e61fa0; }
+  #terminal-output::-webkit-scrollbar-thumb { background: #e61fa0; }
+  .terminal-btn {
+    color: rgba(13, 0, 80, 0.35);
+    &:hover, &:focus { color: #e61fa0; }
+  }
+
   // ---- Custom scrollbar ----
   ::-webkit-scrollbar       { width: 8px; }
   ::-webkit-scrollbar-track { background: #b3f0f0; }

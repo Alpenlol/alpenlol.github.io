@@ -30,6 +30,45 @@
   }
 </script>
 
+<script>
+  (function () {
+    var KEY = 'vaporwave-mode';
+    var VWAVE_COLORS = ['#e61fa0', '#b967ff', '#ffffff'];
+    var DARK_COLOR = '#d4243b';
+
+    function applyMode(on) {
+      document.documentElement.classList.toggle('vaporwave', on);
+      updateParticles(on);
+      var avatar = document.getElementById('avatar-img');
+      if (avatar) {
+        avatar.src = on ? '/img/vaporwave_curt.png' : '/img/curt.png';
+      }
+    }
+
+    function updateParticles(on) {
+      if (typeof tsParticles === 'undefined') return;
+      var c = tsParticles.domItem(0);
+      if (!c) return;
+      c.options.particles.color.value = on ? VWAVE_COLORS : DARK_COLOR;
+      c.options.particles.shape.type = on ? 'circle' : 'square';
+      c.refresh();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var btn = document.getElementById('vaporwave-toggle');
+      if (btn) {
+        btn.addEventListener('click', function () {
+          var next = !document.documentElement.classList.contains('vaporwave');
+          applyMode(next);
+          try { localStorage.setItem(KEY, next ? '1' : '0'); } catch (e) {}
+        });
+      }
+    });
+
+    try { if (localStorage.getItem(KEY) === '1') applyMode(true); } catch (e) {}
+  })();
+</script>
+
 {% if page.url contains 'contact' %}
   <!-- Form Validation -->
   <script src="{{"/assets/vendor/startbootstrap-clean-blog/js/jqBootstrapValidation.js" | relative_url }}"></script>

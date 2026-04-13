@@ -1,0 +1,296 @@
+// ============================================
+// VAPORWAVE MODE — activated by html.vaporwave
+// Palette: cyan bg, hot magenta accents, purple headings
+// ============================================
+
+// Toggle switch — base styles, always rendered in both modes
+.vaporwave-toggle {
+  display: inline-flex;
+  align-items: center;
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+  padding: 2px;
+  margin-left: 10px;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  flex-shrink: 0;
+
+  &:focus { outline: none; }
+
+  .vaporwave-toggle-knob {
+    display: block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.7);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+}
+
+html.vaporwave {
+
+  // ---- Global ----
+  body {
+    background: linear-gradient(135deg, #b3f0f0 0%, #f5c8f0 50%, #d4c8f5 100%);
+    background-attachment: fixed;
+    color: #0d0050;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 20, 0.04) 2px,
+      rgba(0, 0, 20, 0.04) 4px
+    );
+  }
+
+  a {
+    color: #e61fa0;
+    &:hover, &:focus {
+      color: #b967ff;
+    }
+  }
+
+  hr {
+    border-color: #ff71ce;
+  }
+
+  blockquote {
+    color: #7700cc;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #7700cc;
+  }
+
+  h1, h2, h3 {
+    text-shadow:
+      0 0 8px rgba(230, 31, 160, 0.6),
+      0 0 20px rgba(185, 103, 255, 0.35),
+      0 0 40px rgba(185, 103, 255, 0.15);
+  }
+
+  ::selection { background: #e61fa0; color: #fff; }
+  ::-moz-selection { background: #e61fa0; color: #fff; }
+
+  // ---- Toggle switch in vaporwave mode ----
+  .vaporwave-toggle {
+    background: linear-gradient(135deg, #e61fa0, #b967ff);
+    border-color: transparent;
+
+    .vaporwave-toggle-knob {
+      background: #fff;
+      transform: translateX(16px);
+    }
+  }
+
+  // ---- Navbar ----
+  #mainNav {
+    background-color: #66d9d9;
+
+    .navbar-brand {
+      color: #0d0050;
+      border-left-color: #e61fa0;
+      &:hover, &:focus { color: #e61fa0; }
+    }
+
+    .navbar-toggler {
+      color: #0d0050;
+      border-color: rgba(13, 0, 80, 0.3);
+    }
+
+    .navbar-nav > li.nav-item > a {
+      color: #0d0050;
+      &:hover, &:focus { color: #e61fa0; }
+    }
+
+    @media only screen and (min-width: 992px) {
+      background: transparent;
+
+      .navbar-brand {
+        color: #0d0050;
+        &:hover, &:focus { color: #e61fa0; }
+      }
+
+      .navbar-nav > li.nav-item > a {
+        color: #0d0050;
+        &:hover, &:focus { color: #e61fa0; }
+      }
+
+      &.is-fixed {
+        background-color: rgba(102, 217, 217, 0.97);
+        border-bottom-color: #e61fa0;
+
+        .navbar-brand {
+          color: #0d0050;
+          &:hover, &:focus { color: #e61fa0; }
+        }
+
+        .navbar-nav > li.nav-item > a {
+          color: #0d0050;
+          &:hover, &:focus { color: #e61fa0; }
+        }
+      }
+    }
+  }
+
+  // ---- Masthead / hero ----
+  header.masthead {
+    border-bottom-color: #e61fa0;
+
+    .overlay {
+      background-color: rgba(179, 240, 240, 0.75);
+      opacity: 1;
+    }
+  }
+
+  // ---- Post previews ----
+  .post-preview {
+    background: #e6fafa;
+    border-color: #ff71ce;
+    border-left-color: #e61fa0;
+    box-shadow:
+      0 0 12px rgba(230, 31, 160, 0.3),
+      0 0 28px rgba(185, 103, 255, 0.12);
+    animation: vaporwave-border 3s linear infinite;
+
+    > a {
+      color: #7700cc;
+      &:hover, &:focus {
+        color: #e61fa0;
+        text-decoration: none;
+      }
+
+      > .post-title { color: #7700cc; }
+      > .post-subtitle { color: #0d0050; }
+    }
+
+    > .post-meta {
+      color: #b967ff;
+
+      > a {
+        color: #7700cc;
+        &:hover, &:focus { color: #e61fa0; }
+      }
+    }
+  }
+
+  // ---- Buttons ----
+  .btn-primary {
+    background-color: #e61fa0;
+    border-color: #e61fa0;
+    color: #fff;
+
+    &:hover, &:focus, &:active {
+      background-color: #c01880 !important;
+      border-color: #c01880 !important;
+      color: #fff;
+    }
+  }
+
+  // ---- Syntax highlighting ----
+  .highlight {
+    background: #e6fafa;
+    color: #0d0050;
+    border-color: #ff71ce;
+    border-left-color: #e61fa0;
+
+    .c, .cm, .c1, .cs, .cp  { color: #9940cc; font-style: italic; }
+    .s, .s1, .s2, .sb, .sc, .sh, .sx, .sr { color: #e61fa0; }
+    .k, .kc, .kd, .kn, .kp, .kr, .kt, .kv { color: #7700cc; font-weight: bold; }
+    .nf, .fm, .ni, .nl, .nn, .nx { color: #b967ff; }
+    .n, .na, .nb, .nc, .nd, .ne, .no, .nv, .bp, .vc, .vg, .vi, .vm { color: #0d0050; }
+    .m, .mi, .mf, .mh, .mo, .il { color: #0077cc; }
+    .o, .ow { color: #7700cc; }
+    .p { color: #0d0050; }
+    .gd { color: #e61fa0; }
+    .gi { color: #00a878; }
+    .gh, .gu { color: #b967ff; font-weight: bold; }
+    .err { color: #e61fa0; }
+    .w { color: #0d0050; }
+
+    pre { color: #0d0050; margin: 0; }
+  }
+
+  // ---- Tables ----
+  table {
+    background: #e6fafa;
+    border-color: #ff71ce;
+    border-left-color: #e61fa0;
+
+    th, td {
+      border-color: #ff71ce;
+    }
+
+    th {
+      color: #0d0050;
+    }
+
+    td {
+      color: #0d0050;
+    }
+
+    tr:hover td {
+      background: rgba(230, 31, 160, 0.08);
+    }
+  }
+
+  // ---- Footer ----
+  footer {
+    background-color: #66d9d9;
+    color: #0d0050;
+
+    .copyright {
+      color: #0d0050;
+    }
+
+    a {
+      color: #e61fa0;
+      &:hover, &:focus { color: #7700cc; }
+    }
+  }
+
+  // ---- Glitch animation targets ----
+  #mainNav .navbar-brand {
+    animation: vaporwave-glitch 6s infinite;
+  }
+
+  header.masthead h1 {
+    animation: vaporwave-glitch 8s infinite;
+    animation-delay: 2s;
+  }
+
+  // ---- Custom scrollbar ----
+  ::-webkit-scrollbar       { width: 8px; }
+  ::-webkit-scrollbar-track { background: #b3f0f0; }
+  ::-webkit-scrollbar-thumb { background: #e61fa0; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #b967ff; }
+}
+
+// ---- Keyframes (outside html.vaporwave scope) ----
+@keyframes vaporwave-glitch {
+  0%, 88%, 100% { text-shadow: 0 0 8px rgba(230, 31, 160, 0.5); transform: none; }
+  90%  { text-shadow: -3px 0 #e61fa0, 3px 0 #01cdfe; transform: skewX(-1deg); }
+  92%  { text-shadow:  3px 0 #e61fa0, -3px 0 #b967ff; transform: skewX(1deg); }
+  94%  { text-shadow: -2px 0 #01cdfe, 2px 0 #e61fa0; transform: none; }
+  96%  { text-shadow: 0 0 8px rgba(230, 31, 160, 0.5); }
+}
+
+@keyframes vaporwave-border {
+  0%   { border-left-color: #e61fa0; }
+  33%  { border-left-color: #b967ff; }
+  66%  { border-left-color: #01cdfe; }
+  100% { border-left-color: #e61fa0; }
+}

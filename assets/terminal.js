@@ -21,6 +21,7 @@
         'blog':           null,
         'flag.txt':       null,
         'tools': {
+          '0day.bin':      null,
           'burpsuite.jar': null,
           'metasploit':    null,
           'nmap':          null
@@ -334,6 +335,10 @@
         ], 't-output', 15);
         return;
       }
+      if (fname === '0day.bin') {
+        EXECUTABLES['0day.bin']([]);
+        return;
+      }
 
       printLine('cat: ' + file + ': No such file or directory', 't-error');
     },
@@ -496,6 +501,34 @@
     }
   };
 
+  // ---- Executables (VFS files that can be "run") ----
+
+  var EXECUTABLES = {
+    '0day.bin': function () {
+      typewriterLines([
+        '[*] dropping payload...',
+        '',
+        '\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u2801\u2821\u2854\u2824\u2800\u2800\u2800\u2800\u2800\u2800\u2800',
+        '\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u283E\u2800\u2800\u2838\u2847\u2800\u2800\u2800\u2800\u2800\u2800',
+        '\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u280F\u2800\u2800\u2838\u2847\u2800\u2800\u2800\u2800\u2800\u2800',
+        '\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u2847\u2800\u2800\u2838\u2847\u2800\u2800\u2800\u2800\u2800\u2800',
+        '\u2800\u2800\u2800\u2800\u2800\u2800\u2838\u2847\u2800\u2800\u2838\u2847\u2800\u2800\u2800\u2800\u2800\u2800',
+        '\u2800\u2800\u2800\u2801\u283E\u280B\u283B\u2847\u2800\u2800\u2838\u28E7\u2840\u2801\u2800\u2800\u2800\u2800',
+        '\u2800\u2800\u2801\u28BE\u2801\u2800\u2800\u2807\u2800\u2800\u2838\u2801\u2800\u2839\u2800\u2800\u2800\u2800',
+        '\u2880\u2834\u280B\u281F\u2800\u2800\u28A0\u2807\u2800\u2800\u2838\u2800\u2800\u2800\u2807\u2809\u2806\u2800',
+        '\u280E\u2800\u2800\u2847\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u283B\u2800\u2808\u2886',
+        '\u2837\u2840\u2800\u2801\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u28B8',
+        '\u2800\u283B\u28E6\u2841\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u2801\u28BE',
+        '\u2800\u2800\u2808\u287B\u2844\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u2820\u281E\u2801',
+        '\u2800\u2800\u2800\u2800\u2808\u28B7\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u2830\u280B\u2800\u2800',
+        '\u2800\u2800\u2800\u2800\u2800\u28BF\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u2800\u280F\u2800\u2800\u2800',
+        '\u2800\u2800\u2800\u2800\u2800\u281B\u2812\u2812\u2812\u2812\u2812\u2812\u2812\u281A\u2803\u2800\u2800\u2800',
+        '',
+        '[+] payload delivered.'
+      ], 't-error', 40);
+    }
+  };
+
   // ---- Input handling ----
 
   function processCommand(raw) {
@@ -517,9 +550,27 @@
 
     if (COMMANDS[cmd]) {
       COMMANDS[cmd](args);
-    } else {
-      printLine('bash: ' + parts[0] + ': command not found', 't-error');
+      return;
     }
+
+    // Try path execution via VFS (e.g. ./0day.bin, tools/0day.bin, /home/curt/tools/0day.bin)
+    var resolved = normalizePath(parts[0]);
+    var node = getNode(resolved);
+    var baseName = resolved.split('/').pop();
+    if (node === null && EXECUTABLES[baseName]) {
+      EXECUTABLES[baseName](args);
+      return;
+    }
+    if (node === null) {
+      printLine('bash: ' + parts[0] + ': Permission denied', 't-error');
+      return;
+    }
+    if (isDir(node)) {
+      printLine('bash: ' + parts[0] + ': Is a directory', 't-error');
+      return;
+    }
+
+    printLine('bash: ' + parts[0] + ': command not found', 't-error');
   }
 
   if (input) {

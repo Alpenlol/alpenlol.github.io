@@ -406,7 +406,7 @@
         '        =[ metasploit v6.3.4-dev                 ]',
         '+ -- --=[ 2348 exploits - 1220 auxiliary         ]',
         '+ -- --=[ 951 payloads - 45 encoders             ]',
-        '+ -- --=[ CVE-2023-2868: loaded                  ]',
+        '+ -- --=[ 9 post modules - 6 evasion             ]',
         '',
         'msf6 > '
       ], 't-output', 20);
@@ -420,7 +420,7 @@
         'curt         420  1.3  3.7 hell yeah',
         'curt        1337  0.0  0.1 ncat -lvp 4444',
         'curt        1994  0.2  1.2 netscape -navigator',
-        'curt        2868 99.9 41.2 xmrig --coin monero -o pool.minexmr.com:4444',
+        'curt        3141 99.9 41.2 xmrig --coin monero -o pool.minexmr.com:4444',
         'curt        9001  0.0  0.0 [its-over-9000]',
         'root       31337  0.0  0.0 [elite]'
       ], 't-output', 20);
@@ -430,7 +430,7 @@
       typewriterLines([
         '    1  nmap -sV -p- --script vuln target.internal',
         '    2  msfconsole',
-        '    3  use exploit/network/barracuda/cve_2023_2868_rce',
+        '    3  use exploit/multi/handler',
         '    4  set RHOSTS 192.168.1.0/24',
         '    5  exploit',
         '    6  sessions -i 1',
